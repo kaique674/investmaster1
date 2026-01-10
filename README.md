@@ -1,5 +1,3 @@
-```html name=edu-quiz.html
-<!doctype html>
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />

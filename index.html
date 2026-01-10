@@ -2,228 +2,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InvestMaster - Autodidata</title>
+    <title>InvestMaster - Elite Edition</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg: #F8F9FA;
-            --white: #FFFFFF;
-            --primary: #1A252F;
-            --accent: #2980B9;
-            --success: #27AE60;
-            --danger: #E74C3C;
+            --bg: #0F172A;
+            --card: #1E293B;
+            --text: #F8FAFC;
+            --accent: #38BDF8;
+            --success: #22C55E;
+            --danger: #EF4444;
+            --xp: #FACC15;
         }
 
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; display: flex; color: #333; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; color: var(--text); }
 
         /* Menu Lateral */
         #side-menu {
-            width: 260px; height: 100vh; background: var(--primary); color: white;
-            position: fixed; left: -260px; transition: 0.3s; z-index: 1000; padding: 25px 15px;
+            width: 280px; height: 100vh; background: var(--card);
+            position: fixed; left: -280px; transition: 0.4s; z-index: 1000; padding: 25px 15px; border-right: 1px solid #334155;
         }
         #side-menu.active { left: 0; }
-        .menu-link { display: block; color: #BDC3C7; padding: 15px; text-decoration: none; border-bottom: 1px solid #2C3E50; cursor: pointer; }
-        .menu-link:hover { color: white; background: #2C3E50; border-radius: 8px; }
-        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 999; }
+        .profile-area { background: #0F172A; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .xp-bar { background: #334155; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
+        #xp-fill { background: var(--xp); height: 100%; width: 0%; transition: 0.5s; box-shadow: 0 0 10px var(--xp); }
 
-        /* Container */
-        main { flex: 1; padding: 20px; display: flex; justify-content: center; min-height: 100vh; }
-        .container { background: var(--white); width: 100%; max-width: 550px; padding: 35px; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); position: relative; margin-top: 40px; }
-        #menu-btn { font-size: 28px; cursor: pointer; color: var(--primary); position: absolute; left: 20px; top: 20px; z-index: 500; }
+        /* Botão Menu */
+        #menu-btn { position: fixed; left: 25px; top: 25px; z-index: 500; background: var(--accent); color: var(--bg); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; border: none; }
 
-        /* Estilos de Aula */
-        .level-card { background: #fff; border: 2px solid #EDF2F7; border-radius: 18px; padding: 20px; margin-bottom: 15px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .level-card.locked { opacity: 0.5; cursor: not-allowed; background: #F2F4F4; }
-        .box { background: #F0F7FF; border: 1px solid #D1E9FF; padding: 20px; border-radius: 15px; margin: 20px 0; }
-        .label-t { color: #2D3748; font-weight: 800; font-size: 11px; text-transform: uppercase; display: block; }
-        .label-i { color: var(--success); font-weight: 700; display: block; margin-top: 15px; font-size: 11px; text-transform: uppercase; }
+        /* Container Principal */
+        main { flex: 1; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
+        .app-container { background: var(--card); width: 100%; max-width: 600px; padding: 40px; border-radius: 24px; margin-top: 80px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); height: fit-content; }
+
+        /* Elementos do Jogo */
+        .info-box { background: rgba(56, 189, 248, 0.1); border-left: 4px solid var(--accent); padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .tag { font-size: 10px; font-weight: bold; text-transform: uppercase; background: var(--accent); color: var(--bg); padding: 2px 6px; border-radius: 4px; margin-bottom: 10px; display: inline-block; }
         
-        button.opt { width: 100%; padding: 18px; margin: 10px 0; border: 2px solid #EDF2F7; border-radius: 12px; background: white; font-weight: 600; cursor: pointer; text-align: left; }
-        button.opt.selected { background: var(--accent); color: white; border-color: var(--accent); }
-        .btn-main { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; }
+        button.opt { width: 100%; padding: 16px; margin: 8px 0; background: #334155; border: 1px solid #475569; color: white; border-radius: 12px; text-align: left; cursor: pointer; transition: 0.2s; font-size: 15px; }
+        button.opt:hover { border-color: var(--accent); background: #3E4C5E; }
+        button.opt.selected { border-color: var(--accent); background: rgba(56, 189, 248, 0.2); }
+
+        textarea { width: 100%; height: 100px; background: #0F172A; border: 1px solid #475569; color: white; border-radius: 12px; padding: 15px; margin-top: 10px; font-family: inherit; resize: none; }
+
         .hidden { display: none; }
+        #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; backdrop-filter: blur(4px); }
+        .btn-confirm { width: 100%; padding: 18px; background: var(--success); color: white; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div id="side-menu">
-    <h2 style="padding-left: 15px;">InvestMaster 🎓</h2>
-    <div class="menu-link" onclick="mostrarTela('home')">🏠 Trilha de Níveis</div>
-    <div class="menu-link" onclick="mostrarTela('progresso')">📈 Meu Progresso</div>
-    <div class="menu-link" onclick="limparHistorico()" style="color: #E74C3C; margin-top: 50px;">🗑️ Reiniciar Tudo</div>
+    <div class="profile-area">
+        <div style="font-size: 40px;">💎</div>
+        <div id="rank-name" style="color: var(--accent); font-weight: bold; margin-top: 10px;">Novato</div>
+        <div style="font-size: 12px; margin-top: 5px;">XP: <span id="xp-val">0</span></div>
+        <div class="xp-bar"><div id="xp-fill"></div></div>
+    </div>
+    <div onclick="showPage('home')" style="cursor:pointer; padding:15px;">🏠 Jornada</div>
+    <div onclick="resetGame()" style="cursor:pointer; padding:15px; color:var(--danger);">⚠️ Resetar</div>
 </div>
 <div id="overlay" onclick="toggleMenu()"></div>
 
 <main>
-    <div id="menu-btn" onclick="toggleMenu()">☰</div>
-    
-    <div class="container">
-        <div id="tela-home">
-            <h2 style="text-align: center;">Escolha seu Nível</h2>
-            <div id="lista-niveis"></div>
+    <button id="menu-btn" onclick="toggleMenu()">☰ MENU</button>
+
+    <div class="app-container">
+        <div id="page-home">
+            <h2 style="text-align: center;">Trilha do Especialista</h2>
+            <div id="level-list"></div>
         </div>
 
-        <div id="tela-jogo" class="hidden">
-            <h3 id="game-title" style="color: var(--accent); margin: 0;"></h3>
-            <div id="icon-display" style="font-size: 60px; text-align: center; margin: 10px 0;"></div>
-            <div class="box">
-                <span class="label-t">📘 Explicação Técnica</span>
-                <div id="txt-tecnico" style="margin-bottom: 10px;"></div>
-                <hr style="border: 0; border-top: 1px solid #D1E9FF;">
-                <span class="label-i">💡 Traduzindo (O que importa)</span>
-                <div id="txt-informal"></div>
+        <div id="page-game" class="hidden">
+            <div style="display:flex; justify-content: space-between;">
+                <span id="game-title" style="color: var(--accent); font-weight: bold;"></span>
+                <span id="game-step"></span>
             </div>
-            <p style="font-weight: bold; background: #FFF9C4; padding: 5px; display: inline-block;">Agora responda:</p>
-            <p id="game-question" style="margin-top: 5px;"></p>
-            <div id="game-options"></div>
-            <button id="btn-confirmar" class="btn-main hidden" onclick="confirmarResposta()">Confirmar Resposta</button>
+            
+            <div class="info-box">
+                <span class="tag">Conceito</span>
+                <div id="txt-tech" style="font-size: 14px; margin-bottom: 10px;"></div>
+                <span class="tag" style="background: var(--success);">Na Prática</span>
+                <div id="txt-real" style="font-size: 15px;"></div>
+            </div>
+
+            <p id="game-q" style="font-weight: bold;"></p>
+            
+            <div id="options-area"></div>
+            <div id="open-area" class="hidden">
+                <textarea id="open-answer" placeholder="Explique com suas palavras..."></textarea>
+                <small style="color: #94A3B8;">Dica: Use termos técnicos aprendidos acima.</small>
+            </div>
+
+            <button id="btn-next" class="btn-confirm hidden" onclick="handleNext()">Confirmar Resposta</button>
+            <div id="study-tip" class="hidden" style="margin-top: 15px; font-size: 13px;">
+                <a id="study-link" href="#" target="_blank" style="color: var(--accent);">Estudar mais sobre isso →</a>
+            </div>
         </div>
 
-        <div id="tela-resultado" class="hidden" style="text-align: center;">
-            <div id="resultado-content"></div>
-        </div>
-
-        <div id="tela-progresso" class="hidden">
-            <h2 style="text-align: center;">Evolução</h2>
-            <canvas id="progressoChart"></canvas>
-            <button class="btn-main" onclick="mostrarTela('home')">Voltar</button>
+        <div id="page-res" class="hidden" style="text-align: center;">
+            <div id="res-body"></div>
         </div>
     </div>
 </main>
 
 <script>
-    const trilha = [
+    // --- DATABASE ---
+    const course = [
         {
-            id: 1, nome: "Nível 1: O Início", status: "unlocked",
-            fases: [
-                { 
-                    t: "Liquidez Diária", e: "💧", 
-                    tecnico: "Capacidade de converter um ativo em caixa prontamente sem perda significativa de valor.", 
-                    informal: "É a velocidade de pegar seu dinheiro de volta. Se tem 'Liquidez Diária', você saca hoje mesmo.", 
-                    q: "Se um investimento tem Liquidez Diária, quando você pode resgatar o dinheiro?", 
-                    o: ["A qualquer momento (hoje)", "Somente após 2 anos"], c: 0 
+            name: "Módulo 1: Renda Fixa",
+            questions: [
+                {
+                    type: "multiple",
+                    title: "O que é CDB?",
+                    tech: "Certificado de Depósito Bancário. Título de dívida emitido por bancos.",
+                    real: "Você empresta dinheiro para o banco e ele te paga juros. É seguro pelo FGC.",
+                    q: "Qual a função do investidor ao comprar um CDB?",
+                    o: ["Emprestar dinheiro para o banco", "Tornar-se dono de uma agência", "Pagar as dívidas do governo", "Comprar ações da bolsa"],
+                    c: "Emprestar dinheiro para o banco",
+                    link: "https://www.tesourodireto.com.br/educacao-financeira/blog/o-que-e-cdb.htm"
                 },
-                { 
-                    t: "CDB e FGC", e: "🛡️", 
-                    tecnico: "O Fundo Garantidor de Créditos assegura depósitos em CDBs até o limite de R$ 250 mil por CPF/Instituição.", 
-                    informal: "O FGC é o seu 'seguro'. Se o banco quebrar, ele te devolve até 250 mil reais.", 
-                    q: "Qual o valor máximo que o FGC protege por banco/CPF?", 
-                    o: ["Até R$ 250.000,00", "Qualquer valor, sem limite"], c: 0 
-                }
-            ]
-        },
-        {
-            id: 2, nome: "Nível 2: O Sócio", status: "locked",
-            fases: [
-                { 
-                    t: "Dividendos", e: "🍎", 
-                    tecnico: "Proventos pagos em pecúnia pela companhia aos seus acionistas como parte dos lucros líquidos.", 
-                    informal: "Dividendos são pedaços do lucro da empresa que ela deposita na sua conta por você ser sócio.", 
-                    q: "O que são os Dividendos pagos pelas empresas?", 
-                    o: ["Uma parte do lucro dividida com o sócio", "Um imposto que o investidor paga"], c: 0 
+                {
+                    type: "open",
+                    title: "Avaliação Final: CDB",
+                    tech: "Demonstre que entendeu o fluxo de capital no CDB.",
+                    real: "Explique como funciona o CDB usando termos como 'emprestar', 'banco' e 'juros'.",
+                    q: "Como você explicaria o CDB para um amigo?",
+                    keys: ["emprestar", "banco", "juros", "renda fixa", "fgc"],
+                    link: "https://www.b3.com.br"
                 }
             ]
         }
     ];
 
-    let nivelAtual = 0; let faseAtual = 0; let acertosNivel = 0;
-    let escolha = null; let progressoScores = JSON.parse(localStorage.getItem('progresso')) || [];
+    // --- LOGIC ---
+    let xp = parseInt(localStorage.getItem('master_xp')) || 0;
+    let curLvl = 0; let curStep = 0; let selectedIdx = null;
+
+    // SONS (Web Audio API)
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playSound(type) {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        if(type === 'win') { osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.3); }
+        else if(type === 'err') { osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3); }
+        else { osc.frequency.setValueAtTime(400, audioCtx.currentTime); }
+        osc.start(); gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3); osc.stop(audioCtx.currentTime + 0.3);
+    }
 
     function toggleMenu() {
         document.getElementById('side-menu').classList.toggle('active');
         document.getElementById('overlay').style.display = document.getElementById('side-menu').classList.contains('active') ? 'block' : 'none';
     }
 
-    function mostrarTela(id) {
-        ['tela-home', 'tela-jogo', 'tela-resultado', 'tela-progresso'].forEach(t => document.getElementById(t).classList.add('hidden'));
-        document.getElementById('tela-' + id).classList.remove('hidden');
-        if(id === 'home') renderMenu();
-        if(id === 'progresso') renderGrafico();
-        if(document.getElementById('side-menu').classList.contains('active')) toggleMenu();
+    function updateProfile() {
+        document.getElementById('xp-val').innerText = xp;
+        document.getElementById('xp-fill').style.width = (xp % 100) + "%";
+        let r = "Poupador"; if(xp > 200) r = "Investidor"; if(xp > 500) r = "Shark";
+        document.getElementById('rank-name').innerText = r;
+        localStorage.setItem('master_xp', xp);
     }
 
-    function renderMenu() {
-        const lista = document.getElementById('lista-niveis');
-        lista.innerHTML = "";
-        trilha.forEach((n, i) => {
-            const card = document.createElement('div');
-            card.className = `level-card ${n.status}`;
-            card.innerHTML = `<div><strong>${n.nome}</strong></div> <span>${n.status === 'locked' ? '🔒' : '▶️'}</span>`;
-            if(n.status !== 'locked') card.onclick = () => iniciarNivel(i);
-            lista.appendChild(card);
+    function showPage(p) {
+        ['page-home', 'page-game', 'page-res'].forEach(id => document.getElementById(id).classList.add('hidden'));
+        document.getElementById('page-' + p).classList.remove('hidden');
+        if(p === 'home') renderLevels();
+    }
+
+    function renderLevels() {
+        const list = document.getElementById('level-list'); list.innerHTML = "";
+        course.forEach((lvl, i) => {
+            const btn = document.createElement('div');
+            btn.className = "opt"; btn.innerHTML = `<b>${lvl.name}</b>`;
+            btn.onclick = () => startLevel(i);
+            list.appendChild(btn);
         });
     }
 
-    function iniciarNivel(i) {
-        nivelAtual = i; faseAtual = 0; acertosNivel = 0;
-        mostrarTela('jogo');
-        renderFase();
+    function startLevel(i) {
+        curLvl = i; curStep = 0; showPage('game'); renderStep();
     }
 
-    function renderFase() {
-        const f = trilha[nivelAtual].fases[faseAtual];
-        document.getElementById('game-title').innerText = f.t;
-        document.getElementById('icon-display').innerText = f.e;
-        document.getElementById('txt-tecnico').innerText = f.tecnico;
-        document.getElementById('txt-informal').innerText = f.informal;
-        document.getElementById('game-question').innerText = f.q;
-        const opts = document.getElementById('game-options');
-        opts.innerHTML = "";
-        f.o.forEach((txt, i) => {
-            const b = document.createElement('button');
-            b.className = 'opt';
-            b.innerText = txt;
-            b.onclick = () => {
-                escolha = i;
-                Array.from(opts.children).forEach(el => el.classList.remove('selected'));
-                b.classList.add('selected');
-                document.getElementById('btn-confirmar').classList.remove('hidden');
-            };
-            opts.appendChild(b);
-        });
-    }
+    function renderStep() {
+        const s = course[curLvl].questions[curStep];
+        document.getElementById('game-title').innerText = s.title;
+        document.getElementById('game-step').innerText = `${curStep + 1}/${course[curLvl].questions.length}`;
+        document.getElementById('txt-tech').innerText = s.tech;
+        document.getElementById('txt-real').innerText = s.real;
+        document.getElementById('game-q').innerText = s.q;
+        document.getElementById('study-link').href = s.link;
+        document.getElementById('study-tip').classList.remove('hidden');
+        
+        const optArea = document.getElementById('options-area');
+        const openArea = document.getElementById('open-area');
+        optArea.innerHTML = ""; optArea.classList.add('hidden');
+        openArea.classList.add('hidden');
+        document.getElementById('btn-next').classList.add('hidden');
 
-    function confirmarResposta() {
-        if(escolha === trilha[nivelAtual].fases[faseAtual].c) acertosNivel++;
-        faseAtual++; escolha = null;
-        document.getElementById('btn-confirmar').classList.add('hidden');
-        if(faseAtual < trilha[nivelAtual].fases.length) renderFase();
-        else finalizarNivel();
-    }
-
-    function finalizarNivel() {
-        mostrarTela('resultado');
-        const total = trilha[nivelAtual].fases.length;
-        const passou = acertosNivel === total;
-        let html = `<h2>${passou ? '📜 Diploma Liberado!' : '⚠️ Precisa Revisar'}</h2>`;
-        html += `<p>Você acertou ${acertosNivel} de ${total}.</p>`;
-        if(passou) {
-            trilha[nivelAtual].status = 'unlocked'; // Mantém unlocked ou marca como completo
-            if(trilha[nivelAtual+1]) trilha[nivelAtual+1].status = 'unlocked';
-            progressoScores.push(100);
+        if(s.type === 'multiple') {
+            optArea.classList.remove('hidden');
+            // Aleatoriedade das alternativas
+            const shuffled = [...s.o].sort(() => Math.random() - 0.5);
+            shuffled.forEach(txt => {
+                const b = document.createElement('button'); b.className = "opt"; b.innerText = txt;
+                b.onclick = () => {
+                    selectedIdx = txt;
+                    Array.from(optArea.children).forEach(c => c.classList.remove('selected'));
+                    b.classList.add('selected');
+                    document.getElementById('btn-next').classList.remove('hidden');
+                };
+                optArea.appendChild(b);
+            });
         } else {
-            progressoScores.push(Math.round((acertosNivel/total)*100));
+            openArea.classList.remove('hidden');
+            document.getElementById('btn-next').classList.remove('hidden');
+            document.getElementById('open-answer').value = "";
         }
-        localStorage.setItem('progresso', JSON.stringify(progressoScores));
-        html += `<button class="btn-main" onclick="mostrarTela('home')">Voltar ao Menu</button>`;
-        document.getElementById('resultado-content').innerHTML = html;
     }
 
-    function renderGrafico() {
-        const ctx = document.getElementById('progressoChart').getContext('2d');
-        if(window.myChart) window.myChart.destroy();
-        window.myChart = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: progressoScores.map((_, i) => i + 1),
-                datasets: [{ label: 'Score %', data: progressoScores, borderColor: '#2980B9', fill: false }]
-            }
-        });
+    function handleNext() {
+        const s = course[curLvl].questions[curStep];
+        let correct = false;
+
+        if(s.type === 'multiple') {
+            correct = (selectedIdx === s.c);
+        } else {
+            const val = document.getElementById('open-answer').value.toLowerCase();
+            const hits = s.keys.filter(k => val.includes(k));
+            correct = (hits.length >= 2); // Exige pelo menos 2 palavras-chave
+        }
+
+        if(correct) {
+            playSound('win'); xp += 50; updateProfile();
+            curStep++;
+            if(curStep < course[curLvl].questions.length) renderStep();
+            else finishLevel();
+        } else {
+            playSound('err'); alert("Resposta incompleta ou incorreta. Releia o conceito!");
+        }
     }
 
-    function limparHistorico() { localStorage.clear(); location.reload(); }
+    function finishLevel() {
+        showPage('res');
+        document.getElementById('res-body').innerHTML = `<h2>Módulo Concluído! 🎓</h2><p>Você ganhou XP e está mais perto de se tornar um Shark.</p><button class="btn-confirm" onclick="showPage('home')">Voltar</button>`;
+    }
 
-    renderMenu();
+    function resetGame() { if(confirm("Resetar tudo?")) { localStorage.clear(); location.reload(); } }
+
+    updateProfile(); renderLevels();
 </script>
 </body>
 </html>

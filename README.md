@@ -1,21 +1,15 @@
+<!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InvestMaster - Elite Edition</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>InvestMaster - Elite Autodidata</title>
     <style>
         :root {
-            --bg: #0F172A;
-            --card: #1E293B;
-            --text: #F8FAFC;
-            --accent: #38BDF8;
-            --success: #22C55E;
-            --danger: #EF4444;
-            --xp: #FACC15;
+            --bg: #0F172A; --card: #1E293B; --text: #F8FAFC;
+            --accent: #38BDF8; --success: #22C55E; --danger: #EF4444; --xp: #FACC15;
         }
-
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; color: var(--text); }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; display: flex; color: var(--text); overflow-x: hidden; }
 
         /* Menu Lateral */
         #side-menu {
@@ -23,43 +17,46 @@
             position: fixed; left: -280px; transition: 0.4s; z-index: 1000; padding: 25px 15px; border-right: 1px solid #334155;
         }
         #side-menu.active { left: 0; }
-        .profile-area { background: #0F172A; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 30px; }
+        .profile-area { background: #0F172A; padding: 20px; border-radius: 16px; text-align: center; margin-bottom: 30px; border: 1px solid #334155; }
         .xp-bar { background: #334155; height: 10px; border-radius: 5px; margin-top: 10px; overflow: hidden; }
         #xp-fill { background: var(--xp); height: 100%; width: 0%; transition: 0.5s; box-shadow: 0 0 10px var(--xp); }
 
         /* Botão Menu */
-        #menu-btn { position: fixed; left: 25px; top: 25px; z-index: 500; background: var(--accent); color: var(--bg); padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; border: none; }
+        #menu-btn { position: fixed; left: 20px; top: 20px; z-index: 500; background: var(--accent); color: var(--bg); padding: 12px 18px; border-radius: 10px; cursor: pointer; font-weight: bold; border: none; }
 
-        /* Container Principal */
+        /* Container */
         main { flex: 1; display: flex; justify-content: center; padding: 20px; min-height: 100vh; }
-        .app-container { background: var(--card); width: 100%; max-width: 600px; padding: 40px; border-radius: 24px; margin-top: 80px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); height: fit-content; }
+        .app-container { background: var(--card); width: 100%; max-width: 650px; padding: 40px; border-radius: 24px; margin-top: 80px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); height: fit-content; }
 
-        /* Elementos do Jogo */
-        .info-box { background: rgba(56, 189, 248, 0.1); border-left: 4px solid var(--accent); padding: 20px; border-radius: 12px; margin: 20px 0; }
-        .tag { font-size: 10px; font-weight: bold; text-transform: uppercase; background: var(--accent); color: var(--bg); padding: 2px 6px; border-radius: 4px; margin-bottom: 10px; display: inline-block; }
+        /* Cards de Aula */
+        .info-box { background: rgba(56, 189, 248, 0.05); border-left: 4px solid var(--accent); padding: 20px; border-radius: 12px; margin: 20px 0; }
+        .tag { font-size: 10px; font-weight: bold; text-transform: uppercase; background: var(--accent); color: var(--bg); padding: 2px 6px; border-radius: 4px; margin-bottom: 8px; display: inline-block; }
         
         button.opt { width: 100%; padding: 16px; margin: 8px 0; background: #334155; border: 1px solid #475569; color: white; border-radius: 12px; text-align: left; cursor: pointer; transition: 0.2s; font-size: 15px; }
         button.opt:hover { border-color: var(--accent); background: #3E4C5E; }
         button.opt.selected { border-color: var(--accent); background: rgba(56, 189, 248, 0.2); }
 
-        textarea { width: 100%; height: 100px; background: #0F172A; border: 1px solid #475569; color: white; border-radius: 12px; padding: 15px; margin-top: 10px; font-family: inherit; resize: none; }
+        textarea { width: 100%; height: 100px; background: #0F172A; border: 1px solid #475569; color: white; border-radius: 12px; padding: 15px; margin-top: 10px; resize: none; color: #fff; font-family: inherit; }
 
+        .btn-confirm { width: 100%; padding: 18px; background: var(--success); color: white; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; cursor: pointer; }
         .hidden { display: none; }
         #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 999; backdrop-filter: blur(4px); }
-        .btn-confirm { width: 100%; padding: 18px; background: var(--success); color: white; border: none; border-radius: 12px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+        
+        .level-card { background: #1e293b; border: 1px solid #334155; padding: 20px; border-radius: 15px; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.3s; }
+        .level-card:hover { border-color: var(--accent); background: #263349; }
     </style>
 </head>
 <body>
 
 <div id="side-menu">
     <div class="profile-area">
-        <div style="font-size: 40px;">💎</div>
-        <div id="rank-name" style="color: var(--accent); font-weight: bold; margin-top: 10px;">Novato</div>
-        <div style="font-size: 12px; margin-top: 5px;">XP: <span id="xp-val">0</span></div>
+        <div style="font-size: 40px;">🏅</div>
+        <div id="rank-name" style="color: var(--accent); font-weight: bold; margin-top: 10px;">Iniciante</div>
+        <div style="font-size: 12px; margin-top: 5px;">XP Total: <span id="xp-val">0</span></div>
         <div class="xp-bar"><div id="xp-fill"></div></div>
     </div>
-    <div onclick="showPage('home')" style="cursor:pointer; padding:15px;">🏠 Jornada</div>
-    <div onclick="resetGame()" style="cursor:pointer; padding:15px; color:var(--danger);">⚠️ Resetar</div>
+    <div onclick="showPage('home')" style="cursor:pointer; padding:15px; border-bottom: 1px solid #334155;">🏠 Trilha de Níveis</div>
+    <div onclick="resetGame()" style="cursor:pointer; padding:15px; color:var(--danger);">⚠️ Resetar Tudo</div>
 </div>
 <div id="overlay" onclick="toggleMenu()"></div>
 
@@ -68,34 +65,34 @@
 
     <div class="app-container">
         <div id="page-home">
-            <h2 style="text-align: center;">Trilha do Especialista</h2>
+            <h2 style="text-align: center; color: var(--accent); margin-bottom: 30px;">Academia de Investimentos</h2>
             <div id="level-list"></div>
         </div>
 
         <div id="page-game" class="hidden">
-            <div style="display:flex; justify-content: space-between;">
-                <span id="game-title" style="color: var(--accent); font-weight: bold;"></span>
-                <span id="game-step"></span>
+            <div style="display:flex; justify-content: space-between; align-items: center;">
+                <span id="game-title" style="font-weight: bold; color: var(--accent);"></span>
+                <span id="game-step" style="font-size: 12px; opacity: 0.7;"></span>
             </div>
             
             <div class="info-box">
-                <span class="tag">Conceito</span>
-                <div id="txt-tech" style="font-size: 14px; margin-bottom: 10px;"></div>
-                <span class="tag" style="background: var(--success);">Na Prática</span>
-                <div id="txt-real" style="font-size: 15px;"></div>
+                <span class="tag">Conceito Técnico</span>
+                <div id="txt-tech" style="font-size: 13px; margin-bottom: 12px; opacity: 0.9; line-height: 1.5;"></div>
+                <span class="tag" style="background: var(--success);">Explicação</span>
+                <div id="txt-real" style="font-size: 14px; font-weight: 400; line-height: 1.5;"></div>
             </div>
 
-            <p id="game-q" style="font-weight: bold;"></p>
+            <p id="game-q" style="font-weight: bold; margin: 25px 0 15px 0; font-size: 16px;"></p>
             
             <div id="options-area"></div>
             <div id="open-area" class="hidden">
-                <textarea id="open-answer" placeholder="Explique com suas palavras..."></textarea>
-                <small style="color: #94A3B8;">Dica: Use termos técnicos aprendidos acima.</small>
+                <textarea id="open-answer" placeholder="Escreva sua explicação aqui..."></textarea>
             </div>
 
             <button id="btn-next" class="btn-confirm hidden" onclick="handleNext()">Confirmar Resposta</button>
-            <div id="study-tip" class="hidden" style="margin-top: 15px; font-size: 13px;">
-                <a id="study-link" href="#" target="_blank" style="color: var(--accent);">Estudar mais sobre isso →</a>
+            
+            <div id="study-tip" style="margin-top: 25px; font-size: 12px; text-align: center;">
+                <a id="study-link" href="#" target="_blank" style="color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent);">📚 Consultar documentação oficial</a>
             </div>
         </div>
 
@@ -106,48 +103,127 @@
 </main>
 
 <script>
-    // --- DATABASE ---
-    const course = [
+    const db = [
         {
             name: "Módulo 1: Renda Fixa",
             questions: [
                 {
-                    type: "multiple",
-                    title: "O que é CDB?",
-                    tech: "Certificado de Depósito Bancário. Título de dívida emitido por bancos.",
-                    real: "Você empresta dinheiro para o banco e ele te paga juros. É seguro pelo FGC.",
-                    q: "Qual a função do investidor ao comprar um CDB?",
-                    o: ["Emprestar dinheiro para o banco", "Tornar-se dono de uma agência", "Pagar as dívidas do governo", "Comprar ações da bolsa"],
-                    c: "Emprestar dinheiro para o banco",
-                    link: "https://www.tesourodireto.com.br/educacao-financeira/blog/o-que-e-cdb.htm"
+                    type: "multiple", title: "CDB",
+                    tech: "O Certificado de Depósito Bancário é um título de renda fixa emitido por instituições financeiras para captar recursos destinados ao financiamento de suas atividades.",
+                    real: "Nesta modalidade, o investidor disponibiliza capital para o banco por um período determinado em troca de uma remuneração baseada em juros.",
+                    q: "Ao adquirir um título de CDB, qual é a posição jurídica do investidor em relação à instituição financeira?",
+                    o: ["Credor", "Sócio Minoritário", "Avalista", "Beneficiário do Tesouro"],
+                    c: "Credor", link: "https://www.tesourodireto.com.br"
                 },
                 {
-                    type: "open",
-                    title: "Avaliação Final: CDB",
-                    tech: "Demonstre que entendeu o fluxo de capital no CDB.",
-                    real: "Explique como funciona o CDB usando termos como 'emprestar', 'banco' e 'juros'.",
-                    q: "Como você explicaria o CDB para um amigo?",
-                    keys: ["emprestar", "banco", "juros", "renda fixa", "fgc"],
-                    link: "https://www.b3.com.br"
+                    type: "multiple", title: "Liquidez",
+                    tech: "Liquidez é a facilidade com que um ativo financeiro pode ser convertido em caixa imediato sem perda significativa de valor de mercado.",
+                    real: "Diferentes ativos possuem diferentes prazos de conversão, variando de disponibilidade imediata (D+0) até prazos de meses ou anos.",
+                    q: "Um ativo com baixa liquidez apresenta qual característica principal?",
+                    o: ["Dificuldade de conversão rápida em dinheiro", "Risco zero de perda de capital", "Garantia automática do Governo", "Isenção total de impostos"],
+                    c: "Dificuldade de conversão rápida em dinheiro", link: "https://www.b3.com.br"
+                },
+                {
+                    type: "multiple", title: "FGC",
+                    tech: "O Fundo Garantidor de Créditos é uma entidade privada sem fins lucrativos que administra mecanismos de proteção a titulares de créditos contra instituições financeiras.",
+                    real: "O fundo assegura o pagamento de depósitos em caso de intervenção ou liquidação extrajudicial da instituição emissora do título.",
+                    q: "Qual o limite máximo de cobertura do FGC por CPF ou CNPJ dentro de um mesmo conglomerado financeiro?",
+                    o: ["R$ 250.000,00", "R$ 500.000,00", "R$ 100.000,00", "R$ 1.000.000,00"],
+                    c: "R$ 250.000,00", link: "https://www.fgc.org.br"
+                },
+                {
+                    type: "open", title: "Dissertativa: Renda Fixa",
+                    tech: "A estrutura da Renda Fixa baseia-se na previsibilidade de regras de remuneração.",
+                    real: "Utilizando os conceitos de emissão bancária e proteção ao investidor, descreva a lógica do CDB.",
+                    q: "Explique o funcionamento de um CDB e mencione o papel do FGC na segurança deste investimento:",
+                    keys: ["emprestar", "banco", "juros", "fgc", "garantia"], link: "https://www.b3.com.br"
+                }
+            ]
+        },
+        {
+            name: "Módulo 2: Mercado de Capitais",
+            questions: [
+                {
+                    type: "multiple", title: "Ações",
+                    tech: "Ações são títulos nominativos negociáveis que representam a menor unidade do capital social de uma sociedade anônima.",
+                    real: "A propriedade de uma ação confere ao investidor direitos e obrigações proporcionais à sua participação no capital da companhia.",
+                    q: "Ao investir em ações, o investidor passa a ser caracterizado como:",
+                    o: ["Acionista/Sócio", "Credor preferencial", "Detentor de dívida pública", "Garante do passivo laboral"],
+                    c: "Acionista/Sócio", link: "https://www.b3.com.br"
+                },
+                {
+                    type: "multiple", title: "Dividendos",
+                    tech: "Dividendos representam a parcela do lucro líquido de uma companhia distribuída aos seus acionistas em dinheiro.",
+                    real: "A distribuição é decidida em assembleia e ocorre após o encerramento do exercício social, respeitando o estatuto da empresa.",
+                    q: "Qual a origem do capital utilizado para o pagamento de dividendos?",
+                    o: ["Lucro líquido da empresa", "Empréstimos externos", "Taxa de corretagem", "Emissão de novas dívidas"],
+                    c: "Lucro líquido da empresa", link: "https://www.b3.com.br"
+                },
+                {
+                    type: "multiple", title: "FIIs",
+                    tech: "Os Fundos de Investimento Imobiliário reúnem recursos para aplicação em ativos do setor imobiliário, sejam eles físicos (tijolo) ou títulos (papel).",
+                    real: "A receita gerada pelos ativos do fundo (como locações) é distribuída periodicamente aos cotistas de acordo com sua participação.",
+                    q: "Como se chama a remuneração periódica recebida pelo investidor de FIIs proveniente de aluguéis?",
+                    o: ["Proventos/Rendimentos", "Juros sobre capital próprio", "Spread bancário", "Ágio de mercado"],
+                    c: "Proventos/Rendimentos", link: "https://www.b3.com.br"
+                },
+                {
+                    type: "open", title: "Dissertativa: Renda Variável",
+                    tech: "A Renda Variável não garante o retorno do capital inicial e depende do desempenho do ativo.",
+                    real: "Discorra sobre como um investidor pode obter lucro ao investir em ações de empresas.",
+                    q: "Quais são as principais formas de rentabilização no mercado de ações?",
+                    keys: ["valorização", "dividendos", "lucro", "preço", "venda"], link: "https://www.b3.com.br"
+                }
+            ]
+        },
+        {
+            name: "Módulo 3: Tesouro e Estratégia",
+            questions: [
+                {
+                    type: "multiple", title: "Títulos Públicos",
+                    tech: "Títulos da dívida pública federal são instrumentos de captação de recursos para o financiamento das atividades do Estado.",
+                    real: "São considerados os ativos de menor risco de crédito de um país, pois possuem a garantia soberana da União.",
+                    q: "Quem é o garantidor final dos títulos negociados no Tesouro Direto?",
+                    o: ["Tesouro Nacional", "Banco Central", "Bancos de Varejo", "FGC"],
+                    c: "Tesouro Nacional", link: "https://www.tesourodireto.com.br"
+                },
+                {
+                    type: "multiple", title: "IPCA",
+                    tech: "O Índice Nacional de Preços ao Consumidor Amplo mede a variação de preços de uma cesta de produtos e serviços consumida pelas famílias.",
+                    real: "Títulos atrelados a este índice visam proporcionar rendimento acima da variação do custo de vida.",
+                    q: "O que o investidor busca mitigar ao escolher um título indexado ao IPCA?",
+                    o: ["Perda do poder de compra (Inflação)", "Risco de liquidez", "Oscilação do dólar", "Queda da bolsa de valores"],
+                    c: "Perda do poder de compra (Inflação)", link: "https://www.tesourodireto.com.br"
+                },
+                {
+                    type: "multiple", title: "Marcação a Mercado",
+                    tech: "Marcação a mercado é o método de avaliação de ativos pelo seu preço de liquidação atual no mercado secundário.",
+                    real: "O preço do título oscila inversamente à taxa de juros: se as taxas sobem, o preço do título cai; se as taxas caem, o preço sobe.",
+                    q: "Em qual cenário a venda antecipada de um título prefixado resultaria em lucro por marcação a mercado?",
+                    o: ["Queda das taxas de juros", "Alta das taxas de juros", "Manutenção da Selic", "Aumento da inflação"],
+                    c: "Queda das taxas de juros", link: "https://www.tesourodireto.com.br"
+                },
+                {
+                    type: "open", title: "Dissertativa: Estratégia",
+                    tech: "A diversificação é uma técnica de gestão de risco que combina ativos com diferentes correlações.",
+                    real: "Explique a importância de manter títulos públicos e privados em uma carteira de investimentos.",
+                    q: "Por que um investidor deve diversificar sua carteira entre diferentes ativos e indexadores?",
+                    keys: ["risco", "diversificar", "segurança", "equilíbrio", "proteção"], link: "https://www.b3.com.br"
                 }
             ]
         }
     ];
 
-    // --- LOGIC ---
-    let xp = parseInt(localStorage.getItem('master_xp')) || 0;
-    let curLvl = 0; let curStep = 0; let selectedIdx = null;
+    let xp = parseInt(localStorage.getItem('invest_xp_v3')) || 0;
+    let curLvl = 0; let curStep = 0; let selectedAns = null;
+    const audio = new (window.AudioContext || window.webkitAudioContext)();
 
-    // SONS (Web Audio API)
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playSound(type) {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain); gain.connect(audioCtx.destination);
-        if(type === 'win') { osc.frequency.setValueAtTime(523.25, audioCtx.currentTime); osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.3); }
-        else if(type === 'err') { osc.frequency.setValueAtTime(150, audioCtx.currentTime); osc.frequency.linearRampToValueAtTime(50, audioCtx.currentTime + 0.3); }
-        else { osc.frequency.setValueAtTime(400, audioCtx.currentTime); }
-        osc.start(); gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.3); osc.stop(audioCtx.currentTime + 0.3);
+    function playSound(f1, f2) {
+        const osc = audio.createOscillator(); const g = audio.createGain();
+        osc.connect(g); g.connect(audio.destination);
+        osc.frequency.setValueAtTime(f1, audio.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(f2, audio.currentTime + 0.2);
+        osc.start(); g.gain.exponentialRampToValueAtTime(0.0001, audio.currentTime + 0.2); osc.stop(audio.currentTime + 0.2);
     }
 
     function toggleMenu() {
@@ -155,12 +231,12 @@
         document.getElementById('overlay').style.display = document.getElementById('side-menu').classList.contains('active') ? 'block' : 'none';
     }
 
-    function updateProfile() {
+    function updateUI() {
         document.getElementById('xp-val').innerText = xp;
-        document.getElementById('xp-fill').style.width = (xp % 100) + "%";
-        let r = "Poupador"; if(xp > 200) r = "Investidor"; if(xp > 500) r = "Shark";
-        document.getElementById('rank-name').innerText = r;
-        localStorage.setItem('master_xp', xp);
+        document.getElementById('xp-fill').style.width = Math.min(xp/15, 100) + "%";
+        let rank = "Iniciante"; if(xp > 300) rank = "Investidor"; if(xp > 800) rank = "Estrategista Senior";
+        document.getElementById('rank-name').innerText = rank;
+        localStorage.setItem('invest_xp_v3', xp);
     }
 
     function showPage(p) {
@@ -171,85 +247,65 @@
 
     function renderLevels() {
         const list = document.getElementById('level-list'); list.innerHTML = "";
-        course.forEach((lvl, i) => {
-            const btn = document.createElement('div');
-            btn.className = "opt"; btn.innerHTML = `<b>${lvl.name}</b>`;
-            btn.onclick = () => startLevel(i);
-            list.appendChild(btn);
+        db.forEach((lvl, i) => {
+            const card = document.createElement('div'); card.className = "level-card";
+            card.innerHTML = `<span>${lvl.name}</span> <span>Estudar →</span>`;
+            card.onclick = () => { curLvl = i; curStep = 0; showPage('game'); renderStep(); };
+            list.appendChild(card);
         });
     }
 
-    function startLevel(i) {
-        curLvl = i; curStep = 0; showPage('game'); renderStep();
-    }
-
     function renderStep() {
-        const s = course[curLvl].questions[curStep];
+        const s = db[curLvl].questions[curStep];
         document.getElementById('game-title').innerText = s.title;
-        document.getElementById('game-step').innerText = `${curStep + 1}/${course[curLvl].questions.length}`;
+        document.getElementById('game-step').innerText = `${curStep + 1} / ${db[curLvl].questions.length}`;
         document.getElementById('txt-tech').innerText = s.tech;
         document.getElementById('txt-real').innerText = s.real;
         document.getElementById('game-q').innerText = s.q;
         document.getElementById('study-link').href = s.link;
-        document.getElementById('study-tip').classList.remove('hidden');
         
         const optArea = document.getElementById('options-area');
         const openArea = document.getElementById('open-area');
-        optArea.innerHTML = ""; optArea.classList.add('hidden');
-        openArea.classList.add('hidden');
+        optArea.innerHTML = ""; optArea.classList.add('hidden'); openArea.classList.add('hidden');
         document.getElementById('btn-next').classList.add('hidden');
 
         if(s.type === 'multiple') {
             optArea.classList.remove('hidden');
-            // Aleatoriedade das alternativas
-            const shuffled = [...s.o].sort(() => Math.random() - 0.5);
-            shuffled.forEach(txt => {
+            [...s.o].sort(() => Math.random() - 0.5).forEach(txt => {
                 const b = document.createElement('button'); b.className = "opt"; b.innerText = txt;
-                b.onclick = () => {
-                    selectedIdx = txt;
-                    Array.from(optArea.children).forEach(c => c.classList.remove('selected'));
-                    b.classList.add('selected');
-                    document.getElementById('btn-next').classList.remove('hidden');
-                };
+                b.onclick = () => { selectedAns = txt; Array.from(optArea.children).forEach(c => c.classList.remove('selected')); b.classList.add('selected'); document.getElementById('btn-next').classList.remove('hidden'); };
                 optArea.appendChild(b);
             });
         } else {
-            openArea.classList.remove('hidden');
-            document.getElementById('btn-next').classList.remove('hidden');
+            openArea.classList.remove('hidden'); document.getElementById('btn-next').classList.remove('hidden');
             document.getElementById('open-answer').value = "";
         }
     }
 
     function handleNext() {
-        const s = course[curLvl].questions[curStep];
-        let correct = false;
-
-        if(s.type === 'multiple') {
-            correct = (selectedIdx === s.c);
-        } else {
+        const s = db[curLvl].questions[curStep];
+        let win = false;
+        if(s.type === 'multiple') win = (selectedAns === s.c);
+        else {
             const val = document.getElementById('open-answer').value.toLowerCase();
-            const hits = s.keys.filter(k => val.includes(k));
-            correct = (hits.length >= 2); // Exige pelo menos 2 palavras-chave
+            win = s.keys.filter(k => val.includes(k)).length >= 2;
         }
 
-        if(correct) {
-            playSound('win'); xp += 50; updateProfile();
-            curStep++;
-            if(curStep < course[curLvl].questions.length) renderStep();
-            else finishLevel();
+        if(win) {
+            playSound(440, 880); xp += 50; updateUI(); curStep++;
+            if(curStep < db[curLvl].questions.length) renderStep();
+            else { 
+                showPage('res'); 
+                document.getElementById('res-body').innerHTML = `<h2 style="color:var(--success)">Módulo Completo!</h2><p>Você demonstrou domínio sobre os conceitos de ${db[curLvl].name}.</p><button class="btn-confirm" onclick="showPage('home')">Próximo Módulo</button>`; 
+            }
         } else {
-            playSound('err'); alert("Resposta incompleta ou incorreta. Releia o conceito!");
+            playSound(220, 110); 
+            alert("A resposta não condiz com os conceitos apresentados. Revise o material técnico.");
         }
     }
 
-    function finishLevel() {
-        showPage('res');
-        document.getElementById('res-body').innerHTML = `<h2>Módulo Concluído! 🎓</h2><p>Você ganhou XP e está mais perto de se tornar um Shark.</p><button class="btn-confirm" onclick="showPage('home')">Voltar</button>`;
-    }
-
-    function resetGame() { if(confirm("Resetar tudo?")) { localStorage.clear(); location.reload(); } }
-
-    updateProfile(); renderLevels();
+    function resetGame() { if(confirm("Deseja apagar seu progresso?")) { localStorage.clear(); location.reload(); } }
+    updateUI(); renderLevels();
 </script>
 </body>
 </html>
